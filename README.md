@@ -1,5 +1,13 @@
 # GitHub Slug action
 
+> **IMPORTANT**
+> This branch is deprecated, check the `v1.1.x` branch instead
+>
+> **End Of Life: 2020-10-25**
+> _This branch will be remain available during a grace period of 6 months_
+>
+> If you use `rlespinasse/github-slug-action@master` in your action, move to `rlespinasse/github-slug-action@v1.1.x` instead
+
 This action slug and expose some github variables.
 
 `Slug` a variable will
@@ -14,20 +22,20 @@ Others `Slug`-ish commands are available:
 
 ## Environment Variables
 
-| GitHub environment variable | Slug variable |
-| - | - |
-| GITHUB_REF | GITHUB_REF_SLUG |
-| GITHUB_HEAD_REF | GITHUB_HEAD_REF_SLUG |
-| GITHUB_BASE_REF | GITHUB_BASE_REF_SLUG |
+| GitHub environment variable | Slug variable        |
+|-----------------------------|----------------------|
+| GITHUB_REF                  | GITHUB_REF_SLUG      |
+| GITHUB_HEAD_REF             | GITHUB_HEAD_REF_SLUG |
+| GITHUB_BASE_REF             | GITHUB_BASE_REF_SLUG |
 
-| GitHub environment variable | Short variable |
-| - | - |
-| GITHUB_SHA | GITHUB_SHA_SHORT |
+| GitHub environment variable | Short variable   |
+|-----------------------------|------------------|
+| GITHUB_SHA                  | GITHUB_SHA_SHORT |
 
 ## Example usage
 
 ```yaml
-- uses: rlespinasse/github-slug-action@master
+- uses: rlespinasse/github-slug-action@v1.1.x
 - name: Print slug variables
   run: |
     echo ${{ env.GITHUB_REF_SLUG }}
