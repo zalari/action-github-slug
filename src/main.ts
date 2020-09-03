@@ -3,14 +3,19 @@ import {slugref, slugurl, slugurlref, shortsha} from './slug'
 
 async function run(): Promise<void> {
   try {
+    const maxLength = getParsedMaxOrDefault()
+
     const eventPath = process.env['GITHUB_EVENT_PATH']
     if (eventPath) {
       const eventData = await import(eventPath)
       if (eventData.hasOwnProperty('ref')) {
-        core.exportVariable('GITHUB_EVENT_REF_SLUG', slugref(eventData.ref))
+        core.exportVariable(
+          'GITHUB_EVENT_REF_SLUG',
+          slugref(eventData.ref, maxLength)
+        )
         core.exportVariable(
           'GITHUB_EVENT_REF_SLUG_URL',
-          slugurlref(eventData.ref)
+          slugurlref(eventData.ref, maxLength)
         )
       }
     }
@@ -32,10 +37,20 @@ async function run(): Promise<void> {
   }
 }
 
+function getParsedMaxOrDefault() {
+  const inputMaxLength = core.getInput('maxLength')
+  const parsedMax = parseInt(inputMaxLength)
+  if (!isNaN(parsedMax) && parsedMax > 1) {
+    return parsedMax < 63 ? parsedMax : 63
+  }
+  return 63
+}
+
 function exportSlugRef(ouputKey: string, inputKey: string): void {
+  const maxLength = getParsedMaxOrDefault()
   const envVar = process.env[inputKey]
   if (envVar) {
-    core.exportVariable(ouputKey, slugref(envVar))
+    core.exportVariable(ouputKey, slugref(envVar, maxLength))
   }
 }
 
@@ -47,9 +62,10 @@ function exportSlug(ouputKey: string, inputKey: string): void {
 }
 
 function exportSlugUrlRef(ouputKey: string, inputKey: string): void {
+  const maxLength = getParsedMaxOrDefault()
   const envVar = process.env[inputKey]
   if (envVar) {
-    core.exportVariable(ouputKey, slugurlref(envVar))
+    core.exportVariable(ouputKey, slugurlref(envVar, maxLength))
   }
 }
 

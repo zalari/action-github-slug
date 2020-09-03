@@ -38,3 +38,12 @@ test('slug_url_ref: a very long name', () => {
     'an-awesome-feature-very-very-very-very-very-very-very-long-more'
   )
 })
+
+test('slug_url_ref: a very long name shortened to maxLength of 30', () => {
+  expect(
+    slugurlref(
+      'refs/heads/an-awesome-Feature-Very-Very-Very-Very-Very-Very-Very-Long-moreThan63Characters',
+      30
+    )
+  ).toEqual('an-awesome-feature-very-very-v')
+})

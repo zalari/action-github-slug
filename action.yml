@@ -1,5 +1,9 @@
 name: "GitHub Slug"
 description: "Action to slug and expose some github variables"
+inputs:
+  maxLength:
+    description: '(Optional) maximum length for slugs, defaults to 63'
+    required: false
 author: 'rlespinasse'
 runs:
   using: 'node12'

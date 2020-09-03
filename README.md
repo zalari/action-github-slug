@@ -11,6 +11,7 @@ This action slug and expose some github variables.
 - replace any character by `-` except `0-9`, `a-z`, and `.`
 - remove leading and trailing `-` character
 - limit the string size to 63 characters
+- _optionally_ you can configure the `maxLength`
 
 Others `Slug`-ish commands are available:
 
@@ -22,6 +23,9 @@ Others `Slug`-ish commands are available:
 ```yaml
 - name: Inject slug/short variables
   uses: rlespinasse/github-slug-action@v2.x
+  # uncomment to limit the length of the slugs to 30
+#  with:
+#    maxLength: 30
 
 - name: Print slug/short variables
   run: |

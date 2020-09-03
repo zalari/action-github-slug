@@ -1,17 +1,17 @@
-export function slugref(envVar: string): string {
+export function slugref(envVar: string, maxLength = 63): string {
   return envVar
     .toLowerCase()
     .replace(RegExp('refs/(heads|tags)/'), '')
     .replace(new RegExp('[_/@]', 'g'), '-')
-    .substring(0, 63)
+    .substring(0, maxLength)
 }
 
 export function slugurl(envVar: string): string {
   return slugref(envVar).replace(new RegExp('[.]', 'g'), '-')
 }
 
-export function slugurlref(envVar: string): string {
-  return slugurl(slugref(envVar))
+export function slugurlref(envVar: string, maxLength = 63): string {
+  return slugurl(slugref(envVar, maxLength))
 }
 
 export function shortsha(envVar: string): string {
