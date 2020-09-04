@@ -37,7 +37,7 @@ async function run(): Promise<void> {
   }
 }
 
-function getParsedMaxOrDefault() {
+function getParsedMaxOrDefault(): number {
   const inputMaxLength = core.getInput('maxLength')
   const parsedMax = parseInt(inputMaxLength)
   if (!isNaN(parsedMax) && parsedMax > 1) {

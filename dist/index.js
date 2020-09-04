@@ -95,12 +95,13 @@ const slug_1 = __webpack_require__(565);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            const maxLength = getParsedMaxOrDefault();
             const eventPath = process.env['GITHUB_EVENT_PATH'];
             if (eventPath) {
                 const eventData = yield Promise.resolve().then(() => __importStar(require(eventPath)));
                 if (eventData.hasOwnProperty('ref')) {
-                    core.exportVariable('GITHUB_EVENT_REF_SLUG', slug_1.slugref(eventData.ref));
-                    core.exportVariable('GITHUB_EVENT_REF_SLUG_URL', slug_1.slugurlref(eventData.ref));
+                    core.exportVariable('GITHUB_EVENT_REF_SLUG', slug_1.slugref(eventData.ref, maxLength));
+                    core.exportVariable('GITHUB_EVENT_REF_SLUG_URL', slug_1.slugurlref(eventData.ref, maxLength));
                 }
             }
             exportSlugRef('GITHUB_REPOSITORY_SLUG', 'GITHUB_REPOSITORY');
@@ -118,10 +119,19 @@ function run() {
         }
     });
 }
+function getParsedMaxOrDefault() {
+    const inputMaxLength = core.getInput('maxLength');
+    const parsedMax = parseInt(inputMaxLength);
+    if (!isNaN(parsedMax) && parsedMax > 1) {
+        return parsedMax < 63 ? parsedMax : 63;
+    }
+    return 63;
+}
 function exportSlugRef(ouputKey, inputKey) {
+    const maxLength = getParsedMaxOrDefault();
     const envVar = process.env[inputKey];
     if (envVar) {
-        core.exportVariable(ouputKey, slug_1.slugref(envVar));
+        core.exportVariable(ouputKey, slug_1.slugref(envVar, maxLength));
     }
 }
 function exportSlug(ouputKey, inputKey) {
@@ -131,9 +141,10 @@ function exportSlug(ouputKey, inputKey) {
     }
 }
 function exportSlugUrlRef(ouputKey, inputKey) {
+    const maxLength = getParsedMaxOrDefault();
     const envVar = process.env[inputKey];
     if (envVar) {
-        core.exportVariable(ouputKey, slug_1.slugurlref(envVar));
+        core.exportVariable(ouputKey, slug_1.slugurlref(envVar, maxLength));
     }
 }
 function exportShortSha(ouputKey, inputKey) {
@@ -482,20 +493,20 @@ function escapeProperty(s) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.slug = exports.shortsha = exports.slugurlref = exports.slugurl = exports.slugref = void 0;
-function slugref(envVar) {
+function slugref(envVar, maxLength = 63) {
     return envVar
         .toLowerCase()
         .replace(RegExp('refs/(heads|tags)/'), '')
         .replace(new RegExp('[_/@]', 'g'), '-')
-        .substring(0, 63);
+        .substring(0, maxLength);
 }
 exports.slugref = slugref;
 function slugurl(envVar) {
     return slugref(envVar).replace(new RegExp('[.]', 'g'), '-');
 }
 exports.slugurl = slugurl;
-function slugurlref(envVar) {
-    return slugurl(slugref(envVar));
+function slugurlref(envVar, maxLength = 63) {
+    return slugurl(slugref(envVar, maxLength));
 }
 exports.slugurlref = slugurlref;
 function shortsha(envVar) {
